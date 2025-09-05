@@ -96,7 +96,7 @@ elif st.session_state.recipe_mode == "poolish":
 
     # Beregn total mengder
     total_dough = number_of_pizzas * weight_per_pizza
-    total_flour = total_dough / (1 + (hydration/100) + (salt/100) + (yeast_percent/100))  # <-- FIXED HERE
+    total_flour = total_dough / (1 + (hydration/100) + (salt/100) + (yeast_percent/100))
     total_water = total_flour * (hydration/100)
     total_salt = total_flour * (salt/100)
     total_yeast = total_flour * (yeast_percent/100)
@@ -120,12 +120,7 @@ else:
     salt = st.sidebar.slider("Salt (%)", 1.0, 3.0, st.session_state.get("salt", 2.0), step=0.1, key="custom_salt")
     yeast = st.sidebar.slider("Gjær (%)", 0.1, 2.0, st.session_state.get("yeast", 0.3), step=0.01, key="custom_yeast")
     preset = False
-
-    # Message box below sliders in custom mode
-    st.sidebar.info(
-        "Mye gjær (1–2%) → kort fermentering (1–4 h RT).\n\n"
-        "Medium (~0.5%) → moderat fermentering (6–8 h RT).\n\n"
-        "Lite gjær (0.1–0.2%) → lang fermentering (24–72 h, ofte CT)."
+    
     )
 
 # --- Message box and ingredient lists OUTSIDE sidebar ---
