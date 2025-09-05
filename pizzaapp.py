@@ -43,7 +43,6 @@ if st.button("Reset alle verdier (på hovedsiden)"):
     st.session_state.salt = 2.0
     st.session_state.yeast = 0.3
     st.session_state.reset_main = True
-    st.experimental_rerun()
 
 # --- Input section ---
 if st.session_state.recipe_mode == "standard":
