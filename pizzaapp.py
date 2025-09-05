@@ -147,16 +147,6 @@ if st.session_state.recipe_mode == "custom":
         "Lite gjær (0.1–0.2%) → lang fermentering (24–72 h, ofte CT)."
     )
 
-# --- Layout ---
-st.header("Ingridienser")
-st.write(f"**Mel:** {total_flour:.1f} g ({100:.1f}%)")
-st.write(f"**Vann:** {total_water:.1f} g ({hydration:.1f}%)")
-st.write(f"**Salt:** {total_salt:.1f} g ({salt:.1f}%)")
-if st.session_state.recipe_mode == "poolish":
-    st.write(f"**Gjær:** {total_yeast:.1f} g ({yeast_percent:.2f}%)")
-else:
-    st.write(f"**Gjær:** {total_yeast:.1f} g ({yeast:.2f}%)")
-
 # --- Gjæring section for standard recipe ---
 if st.session_state.recipe_mode == "standard":
     st.header("Gjæring (24h Deig)")
