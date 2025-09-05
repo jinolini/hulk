@@ -60,6 +60,13 @@ else:
     yeast = st.slider("Gjær (%)", 0.1, 2.0, st.session_state.get("yeast", 0.3), step=0.01, key="yeast")
     preset = False
 
+    # Message box below sliders in custom mode
+    st.info(
+        "Mye gjær (1–2%) → kort fermentering (1–4 h RT).\n\n"
+        "Medium (~0.5%) → moderat fermentering (6–8 h RT).\n\n"
+        "Lite gjær (0.1–0.2%) → lang fermentering (24–72 h, ofte CT)."
+    )
+
 # --- Calculations ---
 if preset:
     total_dough = number_of_pizzas * weight_per_pizza
