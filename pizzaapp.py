@@ -6,10 +6,6 @@ from datetime import datetime, timedelta
 st.set_page_config(layout="wide")
 
 # Move main title to sidebar
-st.sidebar.image(
-    "https://png.pngtree.com/png-clipart/20220116/original/pngtree-pizza-logo-vector-graphic-element-png-image_7079637.png",
-    use_column_width=True
-)
 st.sidebar.title("Jinolinis Pizzadeig kalkulator")
 
 st.markdown(
