@@ -99,6 +99,20 @@ else:
     preset = False
     st.sidebar.button("Reset alle verdier", key="reset_custom")
 
+# --- Calculations --- (move this block up, before ingredient lists)
+if st.session_state.recipe_mode == "poolish":
+    total_dough = number_of_pizzas * weight_per_pizza
+    total_flour = total_dough / (1 + (hydration/100) + (salt/100) + (yeast_percent/100))
+    total_water = total_flour * (hydration/100)
+    total_salt = total_flour * (salt/100)
+    total_yeast = total_flour * (yeast_percent/100)
+else:
+    total_dough = number_of_pizzas * weight_per_pizza
+    total_flour = total_dough / (1 + (hydration/100) + (salt/100) + (yeast/100))
+    total_water = total_flour * (hydration/100)
+    total_salt = total_flour * (salt/100)
+    total_yeast = total_flour * (yeast/100)
+
 # --- Message box and ingredient lists OUTSIDE sidebar ---
 if st.session_state.recipe_mode == "poolish":
     st.subheader("Poolish ingredienser")
@@ -122,20 +136,6 @@ if st.session_state.recipe_mode == "custom":
         "Medium (~0.5%) → moderat fermentering (6–8 h RT).\n\n"
         "Lite gjær (0.1–0.2%) → lang fermentering (24–72 h, ofte CT)."
     )
-
-# --- Calculations ---
-if st.session_state.recipe_mode == "poolish":
-    total_dough = number_of_pizzas * weight_per_pizza
-    total_flour = total_dough / (1 + (hydration/100) + (salt/100) + (yeast_percent/100))
-    total_water = total_flour * (hydration/100)
-    total_salt = total_flour * (salt/100)
-    total_yeast = total_flour * (yeast_percent/100)
-else:
-    total_dough = number_of_pizzas * weight_per_pizza
-    total_flour = total_dough / (1 + (hydration/100) + (salt/100) + (yeast/100))
-    total_water = total_flour * (hydration/100)
-    total_salt = total_flour * (salt/100)
-    total_yeast = total_flour * (yeast/100)
 
 # --- Layout ---
 st.header("Ingridienser")
