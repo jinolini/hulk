@@ -23,7 +23,7 @@ st.markdown(
 
 # --- Sidebar buttons ---
 st.sidebar.header("Velg oppskrift")
-use_custom = st.sidebar.button("Custom")
+use_custom = st.sidebar.button("Egendefinert oppskrift")
 use_standard = st.sidebar.button("24h Deig")
 use_poolish = st.sidebar.button("Poolish deig")
 
@@ -228,3 +228,4 @@ if st.session_state.recipe_mode == "poolish":
         st.write(f"**Klar til steking (etter balling og 2h RT):** {format_time(ball_rt_end)}")
     except ValueError:
         st.error("Skriv inn klokkeslett på formatet HH:MM, f.eks. 14:30")
+
