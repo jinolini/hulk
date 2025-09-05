@@ -120,8 +120,6 @@ else:
     salt = st.sidebar.slider("Salt (%)", 1.0, 3.0, st.session_state.get("salt", 2.0), step=0.1, key="custom_salt")
     yeast = st.sidebar.slider("Gjær (%)", 0.1, 2.0, st.session_state.get("yeast", 0.3), step=0.01, key="custom_yeast")
     preset = False
-    
-    )
 
 # --- Message box and ingredient lists OUTSIDE sidebar ---
 if st.session_state.recipe_mode == "custom":
