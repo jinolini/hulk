@@ -4,7 +4,9 @@ import pandas as pd
 from datetime import datetime, timedelta
 
 st.set_page_config(layout="wide")
-st.title("Jinolinis Pizzadeig kalkulator")
+
+# Move main title to sidebar
+st.sidebar.title("Jinolinis Pizzadeig kalkulator")
 
 st.markdown(
     """
@@ -76,6 +78,7 @@ if st.button("Reset alle verdier"):
 # --- Input section ---
 if st.session_state.recipe_mode == "standard":
     st.sidebar.header("24h Deig")
+    st.header("24h Deig")  # Section title in main area
     number_of_pizzas = st.sidebar.slider("Antall pizzaballer", 1, 20, st.session_state.get("number_of_pizzas", 4), key="standard_number_of_pizzas")
     weight_per_pizza = st.sidebar.slider("Vekt per pizzaball (g)", 160, 350, st.session_state.get("weight_per_pizza", 250), step=10, key="standard_weight_per_pizza")
     hydration = st.sidebar.slider("Hydrasjon (%)", 50.0, 100.0, st.session_state.get("hydration", 64.0), step=1.0, key="standard_hydration")
@@ -85,6 +88,7 @@ if st.session_state.recipe_mode == "standard":
 
 elif st.session_state.recipe_mode == "poolish":
     st.sidebar.header("Poolish deig")
+    st.header("Poolish deig")  # Section title in main area
     number_of_pizzas = st.sidebar.slider("Antall pizzaballer", 1, 20, st.session_state.get("number_of_pizzas", 4), key="poolish_number_of_pizzas")
     weight_per_pizza = st.sidebar.slider("Vekt per pizzaball (g)", 160, 350, st.session_state.get("weight_per_pizza", 250), step=10, key="poolish_weight_per_pizza")
     hydration = st.sidebar.slider("Hydrasjon (%)", 50.0, 100.0, st.session_state.get("hydration", 64.0), step=1.0, key="poolish_hydration")
@@ -114,6 +118,7 @@ elif st.session_state.recipe_mode == "poolish":
 
 else:
     st.sidebar.header("Custom")
+    st.header("Custom")  # Section title in main area
     number_of_pizzas = st.sidebar.slider("Antall Pizza", 1, 20, st.session_state.get("number_of_pizzas", 4), key="custom_number_of_pizzas")
     weight_per_pizza = st.sidebar.slider("Vekt per Pizza (g)", 160, 350, st.session_state.get("weight_per_pizza", 250), step=10, key="custom_weight_per_pizza")
     hydration = st.sidebar.slider("Hydrasjon (%)", 50.0, 100.0, st.session_state.get("hydration", 65.0), key="custom_hydration", step=1.0)
@@ -122,13 +127,6 @@ else:
     preset = False
 
 # --- Message box and ingredient lists OUTSIDE sidebar ---
-if st.session_state.recipe_mode == "custom":
-    st.info(
-        "Mye gjær (1–2%) → kort fermentering (1–4 h RT).\n\n"
-        "Medium (~0.5%) → moderat fermentering (6–8 h RT).\n\n"
-        "Lite gjær (0.1–0.2%) → lang fermentering (24–72 h, ofte CT)."
-    )
-
 if st.session_state.recipe_mode == "poolish":
     st.subheader("Poolish ingredienser")
     st.write(f"Mel: {poolish_flour:.1f} g (100%)")
@@ -139,6 +137,18 @@ if st.session_state.recipe_mode == "poolish":
     st.write(f"Vann: {rest_water:.1f} g")
     st.write(f"Salt: {rest_salt:.1f} g")
     st.write(f"Gjær: {rest_yeast:.3f} g")
+
+if st.session_state.recipe_mode == "custom":
+    st.header("Ingridienser")
+    st.write(f"**Mel:** {total_flour:.1f} g ({100:.1f}%)")
+    st.write(f"**Vann:** {total_water:.1f} g ({hydration:.1f}%)")
+    st.write(f"**Salt:** {total_salt:.1f} g ({salt:.1f}%)")
+    st.write(f"**Gjær:** {total_yeast:.1f} g ({yeast:.2f}%)")
+    st.info(
+        "Mye gjær (1–2%) → kort fermentering (1–4 h RT).\n\n"
+        "Medium (~0.5%) → moderat fermentering (6–8 h RT).\n\n"
+        "Lite gjær (0.1–0.2%) → lang fermentering (24–72 h, ofte CT)."
+    )
 
 # --- Calculations ---
 if st.session_state.recipe_mode == "poolish":
