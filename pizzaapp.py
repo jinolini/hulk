@@ -6,6 +6,19 @@ from datetime import datetime, timedelta
 st.set_page_config(layout="wide")
 st.title("Jinolinis Pizzadeig kalkulator")
 
+st.markdown(
+    """
+    <style>
+        section[data-testid="stSidebar"] {
+            min-width: 400px;
+            max-width: 500px;
+            width: 500px;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # --- Sidebar buttons ---
 st.sidebar.header("Velg oppskrift")
 use_standard = st.sidebar.button("24h Deig")
@@ -62,11 +75,12 @@ if st.button("Reset alle verdier"):
 
 # --- Input section ---
 if st.session_state.recipe_mode == "standard":
-    number_of_pizzas = st.slider("Antall pizzaballer", 1, 20, st.session_state.get("number_of_pizzas", 4), key="number_of_pizzas")
-    weight_per_pizza = st.slider("Vekt per pizzaball (g)", 160, 350, st.session_state.get("weight_per_pizza", 250), step=10, key="weight_per_pizza")
-    hydration = st.slider("Hydrasjon (%)", 50.0, 100.0, st.session_state.get("hydration", 64.0), step=1.0, key="hydration")
-    salt = standard_recipe["salt"]
-    yeast = standard_recipe["yeast"]
+    st.sidebar.header("24h Deig")
+    number_of_pizzas = st.sidebar.slider("Antall pizzaballer", 1, 20, st.session_state.get("number_of_pizzas", 4), key="standard_number_of_pizzas")
+    weight_per_pizza = st.sidebar.slider("Vekt per pizzaball (g)", 160, 350, st.session_state.get("weight_per_pizza", 250), step=10, key="standard_weight_per_pizza")
+    hydration = st.sidebar.slider("Hydrasjon (%)", 50.0, 100.0, st.session_state.get("hydration", 64.0), step=1.0, key="standard_hydration")
+    salt = st.sidebar.slider("Salt (%)", 1.0, 3.0, standard_recipe["salt"], step=0.1, key="standard_salt")
+    yeast = st.sidebar.slider("Gjær (%)", 0.1, 2.0, standard_recipe["yeast"], step=0.01, key="standard_yeast")
     preset = True
 
 elif st.session_state.recipe_mode == "poolish":
@@ -88,15 +102,16 @@ elif st.session_state.recipe_mode == "poolish":
     """)
 
 else:
-    number_of_pizzas = st.slider("Antall Pizza", 1, 20, st.session_state.get("number_of_pizzas", 4), key="number_of_pizzas")
-    weight_per_pizza = st.slider("Vekt per Pizza (g)", 160, 350, st.session_state.get("weight_per_pizza", 250), step=10, key="weight_per_pizza")
-    hydration = st.slider("Hydrasjon (%)", 50.0, 100.0, st.session_state.get("hydration", 65.0), key="hydration", step=1.0)
-    salt = st.slider("Salt (%)", 1.0, 3.0, st.session_state.get("salt", 2.0), step=0.1, key="salt")
-    yeast = st.slider("Gjær (%)", 0.1, 2.0, st.session_state.get("yeast", 0.3), step=0.01, key="yeast")
+    st.sidebar.header("Custom")
+    number_of_pizzas = st.sidebar.slider("Antall Pizza", 1, 20, st.session_state.get("number_of_pizzas", 4), key="custom_number_of_pizzas")
+    weight_per_pizza = st.sidebar.slider("Vekt per Pizza (g)", 160, 350, st.session_state.get("weight_per_pizza", 250), step=10, key="custom_weight_per_pizza")
+    hydration = st.sidebar.slider("Hydrasjon (%)", 50.0, 100.0, st.session_state.get("hydration", 65.0), key="custom_hydration", step=1.0)
+    salt = st.sidebar.slider("Salt (%)", 1.0, 3.0, st.session_state.get("salt", 2.0), step=0.1, key="custom_salt")
+    yeast = st.sidebar.slider("Gjær (%)", 0.1, 2.0, st.session_state.get("yeast", 0.3), step=0.01, key="custom_yeast")
     preset = False
 
     # Message box below sliders in custom mode
-    st.info(
+    st.sidebar.info(
         "Mye gjær (1–2%) → kort fermentering (1–4 h RT).\n\n"
         "Medium (~0.5%) → moderat fermentering (6–8 h RT).\n\n"
         "Lite gjær (0.1–0.2%) → lang fermentering (24–72 h, ofte CT)."
