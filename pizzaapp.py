@@ -140,6 +140,25 @@ else:
         "Lite gjær (0.1–0.2%) → lang fermentering (24–72 h, ofte CT)."
     )
 
+# --- Message box and ingredient lists OUTSIDE sidebar ---
+if st.session_state.recipe_mode == "custom":
+    st.info(
+        "Mye gjær (1–2%) → kort fermentering (1–4 h RT).\n\n"
+        "Medium (~0.5%) → moderat fermentering (6–8 h RT).\n\n"
+        "Lite gjær (0.1–0.2%) → lang fermentering (24–72 h, ofte CT)."
+    )
+
+if st.session_state.recipe_mode == "poolish":
+    st.subheader("Poolish ingredienser")
+    st.write(f"Mel: {poolish_flour:.1f} g (100%)")
+    st.write(f"Vann: {poolish_water:.1f} g (100%)")
+    st.write(f"Gjær: {poolish_yeast:.3f} g")
+    st.subheader("Resten av ingrediensene")
+    st.write(f"Mel: {rest_flour:.1f} g")
+    st.write(f"Vann: {rest_water:.1f} g")
+    st.write(f"Salt: {rest_salt:.1f} g")
+    st.write(f"Gjær: {rest_yeast:.3f} g")
+
 # --- Calculations ---
 if preset:
     total_dough = number_of_pizzas * weight_per_pizza
