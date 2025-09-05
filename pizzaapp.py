@@ -106,6 +106,16 @@ if st.session_state.recipe_mode == "poolish":
     total_water = total_flour * (hydration/100)
     total_salt = total_flour * (salt/100)
     total_yeast = total_flour * (yeast_percent/100)
+
+    # Add these lines to define poolish/rest variables:
+    poolish_flour = total_flour * (poolish_percent / 100)
+    poolish_water = poolish_flour  # 100% hydration in poolish
+    poolish_yeast = poolish_flour * (yeast_percent / 100)
+
+    rest_flour = total_flour - poolish_flour
+    rest_water = total_water - poolish_water
+    rest_salt = total_salt
+    rest_yeast = total_yeast - poolish_yeast
 else:
     total_dough = number_of_pizzas * weight_per_pizza
     total_flour = total_dough / (1 + (hydration/100) + (salt/100) + (yeast/100))
