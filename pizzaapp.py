@@ -36,7 +36,7 @@ if use_custom:
 if "reset_main" not in st.session_state:
     st.session_state.reset_main = False
 
-if st.button("Reset alle verdier (på hovedsiden)"):
+if st.button("Reset alle verdier"):
     st.session_state.number_of_pizzas = 4
     st.session_state.weight_per_pizza = 250
     st.session_state.hydration = 65.0
