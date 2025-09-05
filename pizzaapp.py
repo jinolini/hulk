@@ -143,7 +143,7 @@ if st.session_state.recipe_mode == "poolish":
 # --- Calculations ---
 if preset:
     total_dough = number_of_pizzas * weight_per_pizza
-    total_flour = total_dough / (1 + (hydration/100) + (salt/100) + (yeast/100))
+    total_flour = total_dough / (1 + (hydration/100) + (salt/100) + (yeast_percent/100))
     total_water = total_flour * (hydration/100)
     total_salt = total_flour * (salt/100)
     total_yeast = total_flour * (yeast/100)
