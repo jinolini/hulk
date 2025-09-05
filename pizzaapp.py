@@ -45,7 +45,7 @@ else:
     preset = False
     number_of_pizzas = st.slider("Antall Pizza", 1, 20, 4)
     weight_per_pizza = st.slider("Vekt per Pizza (g)", 160, 350, 250, step=10)
-    hydration = st.slider("Hydrasjon (%)", 50.0, 100.0, 65.0)
+    hydration = st.slider("Hydrasjon (%)", 50.0, 100.0, 65.0, step=1.0)
     salt = st.slider("Salt (%)", 1.0, 3.0, 2.0, step=0.1)
     yeast = st.slider("Gjær (%)", 0.1, 2.0, 0.3, step=0.01)
 
@@ -112,4 +112,5 @@ if st.session_state.recipe_mode == "standard":
 # --- Hide chart and table ---
 
 # (Chart and table code is commented out)
+
 
