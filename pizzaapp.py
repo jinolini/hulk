@@ -63,18 +63,6 @@ if use_custom:
 if use_poolish:
     st.session_state.recipe_mode = "poolish"
 
-# --- Main page reset button ---
-if "reset_main" not in st.session_state:
-    st.session_state.reset_main = False
-
-if st.button("Reset alle verdier"):
-    st.session_state.number_of_pizzas = 4
-    st.session_state.weight_per_pizza = 250
-    st.session_state.hydration = 65.0
-    st.session_state.salt = 2.0
-    st.session_state.yeast = 0.3
-    st.session_state.reset_main = True
-
 # --- Input section ---
 if st.session_state.recipe_mode == "standard":
     st.sidebar.header("24h Deig")
@@ -85,6 +73,7 @@ if st.session_state.recipe_mode == "standard":
     salt = st.sidebar.slider("Salt (%)", 1.0, 3.0, standard_recipe["salt"], step=0.1, key="standard_salt")
     yeast = st.sidebar.slider("Gjær (%)", 0.1, 2.0, standard_recipe["yeast"], step=0.01, key="standard_yeast")
     preset = True
+    st.sidebar.button("Reset alle verdier", key="reset_standard")
 
 elif st.session_state.recipe_mode == "poolish":
     st.sidebar.header("Poolish deig")
@@ -97,24 +86,7 @@ elif st.session_state.recipe_mode == "poolish":
     fermentation_hours = st.sidebar.selectbox("Fermenteringstid (timer)", list(poolish_fermentation.keys()), index=2, key="poolish_fermentation_hours")
     yeast_percent = poolish_fermentation[fermentation_hours]  # This is now % yeast, not grams!
     preset = True
-
-    # Beregn total mengder
-    total_dough = number_of_pizzas * weight_per_pizza
-    total_flour = total_dough / (1 + (hydration/100) + (salt/100) + (yeast_percent/100))
-    total_water = total_flour * (hydration/100)
-    total_salt = total_flour * (salt/100)
-    total_yeast = total_flour * (yeast_percent/100)
-
-    # Poolish mengder
-    poolish_flour = total_flour * (poolish_percent / 100)
-    poolish_water = poolish_flour  # 100% hydration in poolish
-    poolish_yeast = poolish_flour * (yeast_percent / 100)  # Yeast for poolish in grams
-
-    # Resten av ingrediensene (tilsettes etter poolish)
-    rest_flour = total_flour - poolish_flour
-    rest_water = total_water - poolish_water
-    rest_salt = total_salt
-    rest_yeast = total_yeast - poolish_yeast
+    st.sidebar.button("Reset alle verdier", key="reset_poolish")
 
 else:
     st.sidebar.header("Custom")
@@ -125,6 +97,7 @@ else:
     salt = st.sidebar.slider("Salt (%)", 1.0, 3.0, st.session_state.get("salt", 2.0), step=0.1, key="custom_salt")
     yeast = st.sidebar.slider("Gjær (%)", 0.1, 2.0, st.session_state.get("yeast", 0.3), step=0.01, key="custom_yeast")
     preset = False
+    st.sidebar.button("Reset alle verdier", key="reset_custom")
 
 # --- Message box and ingredient lists OUTSIDE sidebar ---
 if st.session_state.recipe_mode == "poolish":
