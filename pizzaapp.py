@@ -91,38 +91,26 @@ elif st.session_state.recipe_mode == "poolish":
     salt = st.sidebar.slider("Salt (%)", 1.0, 3.0, st.session_state.get("salt", 2.0), step=0.1, key="poolish_salt")
     poolish_percent = st.sidebar.slider("Poolish (% av total deig)", 20, 40, 30, step=1, key="poolish_percent")
     fermentation_hours = st.sidebar.selectbox("Fermenteringstid (timer)", list(poolish_fermentation.keys()), index=2, key="poolish_fermentation_hours")
-    yeast = poolish_fermentation[fermentation_hours]
+    yeast_percent = poolish_fermentation[fermentation_hours]  # This is now % yeast, not grams!
     preset = True
 
     # Beregn total mengder
     total_dough = number_of_pizzas * weight_per_pizza
-    total_flour = total_dough / (1 + (hydration/100) + (salt/100) + (yeast/100))
+    total_flour = total_dough / (1 + (hydration/100) + (salt/100) + (yeast_percent/100))
     total_water = total_flour * (hydration/100)
     total_salt = total_flour * (salt/100)
-    total_yeast = total_flour * (yeast/100)
+    total_yeast = total_flour * (yeast_percent/100)
 
     # Poolish mengder
     poolish_flour = total_flour * (poolish_percent / 100)
     poolish_water = poolish_flour  # 100% hydration in poolish
-    poolish_yeast = yeast  # yeast amount from table
+    poolish_yeast = poolish_flour * (yeast_percent / 100)  # Yeast for poolish in grams
 
     # Resten av ingrediensene (tilsettes etter poolish)
     rest_flour = total_flour - poolish_flour
     rest_water = total_water - poolish_water
     rest_salt = total_salt
     rest_yeast = total_yeast - poolish_yeast
-
-    # Sidebar: Poolish ingredienser
-    st.sidebar.subheader("Poolish ingredienser")
-    st.sidebar.write(f"Mel: {poolish_flour:.1f} g (100%)")
-    st.sidebar.write(f"Vann: {poolish_water:.1f} g (100%)")
-    st.sidebar.write(f"Gjær: {poolish_yeast:.3f} g")
-
-    st.sidebar.subheader("Resten av ingrediensene")
-    st.sidebar.write(f"Mel: {rest_flour:.1f} g")
-    st.sidebar.write(f"Vann: {rest_water:.1f} g")
-    st.sidebar.write(f"Salt: {rest_salt:.1f} g")
-    st.sidebar.write(f"Gjær: {rest_yeast:.3f} g")
 
 else:
     st.sidebar.header("Custom")
@@ -152,7 +140,7 @@ if st.session_state.recipe_mode == "poolish":
     st.subheader("Poolish ingredienser")
     st.write(f"Mel: {poolish_flour:.1f} g (100%)")
     st.write(f"Vann: {poolish_water:.1f} g (100%)")
-    st.write(f"Gjær: {poolish_yeast:.3f} g")
+    st.write(f"Gjær: {poolish_yeast:.3f} g ({yeast_percent:.3f}%) for {fermentation_hours} timer fermentering")
     st.subheader("Resten av ingrediensene")
     st.write(f"Mel: {rest_flour:.1f} g")
     st.write(f"Vann: {rest_water:.1f} g")
@@ -226,7 +214,7 @@ if st.session_state.recipe_mode == "poolish":
     **Poolish oppskrift:**  
     - Poolish: {poolish_percent}% av total deig  
     - Poolish = 100% mel + 100% vann  
-    - Gjær til poolish: {yeast:.3f} g ({fermentation_hours} timer fermentering)
+    - Gjær til poolish: {yeast_percent:.3f}% av poolish-mel ({poolish_yeast:.3f} g) for {fermentation_hours} timer fermentering
     """)
     st.markdown(f"""
     **Heveplan:**
