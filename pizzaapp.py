@@ -10,6 +10,20 @@ st.title("Jinolinis Pizzadeig kalkulator")
 st.sidebar.header("Velg oppskrift")
 use_standard = st.sidebar.button("24h Deig")
 use_custom = st.sidebar.button("Custom")
+use_poolish = st.sidebar.button("Poolish deig")
+
+# --- Poolish yeast table ---
+poolish_fermentation = {
+    12: 0.250,
+    13: 0.200,
+    14: 0.160,
+    15: 0.120,
+    16: 0.099,
+    17: 0.078,
+    18: 0.062,
+    19: 0.050,
+    20: 0.039
+}
 
 standard_recipe = {
     "number_of_pizzas": 4,
@@ -31,6 +45,8 @@ if use_standard:
     st.session_state.recipe_mode = "standard"
 if use_custom:
     st.session_state.recipe_mode = "custom"
+if use_poolish:
+    st.session_state.recipe_mode = "poolish"
 
 # --- Main page reset button ---
 if "reset_main" not in st.session_state:
@@ -52,6 +68,25 @@ if st.session_state.recipe_mode == "standard":
     salt = standard_recipe["salt"]
     yeast = standard_recipe["yeast"]
     preset = True
+
+elif st.session_state.recipe_mode == "poolish":
+    st.sidebar.header("Poolish deig")
+    number_of_pizzas = st.sidebar.slider("Antall pizzaballer", 1, 20, st.session_state.get("number_of_pizzas", 4), key="poolish_number_of_pizzas")
+    weight_per_pizza = st.sidebar.slider("Vekt per pizzaball (g)", 160, 350, st.session_state.get("weight_per_pizza", 250), step=10, key="poolish_weight_per_pizza")
+    hydration = st.sidebar.slider("Hydrasjon (%)", 50.0, 100.0, st.session_state.get("hydration", 64.0), step=1.0, key="poolish_hydration")
+    salt = st.sidebar.slider("Salt (%)", 1.0, 3.0, st.session_state.get("salt", 2.0), step=0.1, key="poolish_salt")
+    poolish_percent = st.sidebar.slider("Poolish (% av total deig)", 20, 40, 30, step=1, key="poolish_percent")
+    fermentation_hours = st.sidebar.selectbox("Fermenteringstid (timer)", list(poolish_fermentation.keys()), index=2, key="poolish_fermentation_hours")
+    yeast = poolish_fermentation[fermentation_hours]
+    preset = True
+
+    st.sidebar.markdown(f"""
+    **Poolish oppskrift:**  
+    - Poolish: {poolish_percent}% av total deig  
+    - Poolish = 100% mel + 100% vann  
+    - Gjær til poolish: {yeast:.3f} g ({fermentation_hours} timer fermentering)
+    """)
+
 else:
     number_of_pizzas = st.slider("Antall Pizza", 1, 20, st.session_state.get("number_of_pizzas", 4), key="number_of_pizzas")
     weight_per_pizza = st.slider("Vekt per Pizza (g)", 160, 350, st.session_state.get("weight_per_pizza", 250), step=10, key="weight_per_pizza")
@@ -127,5 +162,45 @@ if st.session_state.recipe_mode == "standard":
     except ValueError:
         st.error("Skriv inn klokkeslett på formatet HH:MM, f.eks. 14:30")
 
-# --- Hide chart and table ---
-# (Chart and table code is commented out)
+# --- Gjæring section for poolish recipe ---
+if st.session_state.recipe_mode == "poolish":
+    st.header("Gjæring (Poolish deig)")
+    st.markdown(f"""
+    **Poolish oppskrift:**  
+    - Poolish: {poolish_percent}% av total deig  
+    - Poolish = 100% mel + 100% vann  
+    - Gjær til poolish: {yeast:.3f} g ({fermentation_hours} timer fermentering)
+    """)
+    st.markdown(f"""
+    **Heveplan:**
+    - Poolish fermenteres: {fermentation_hours} timer  
+    - Poolish blandes med resten av ingrediensene og heves i bulk RT: 2 timer  
+    - Deigen balles og heves videre i RT: 2 timer  
+    """)
+    st.subheader("Beregn tidspunkter for gjæring")
+    start_time_str = st.text_input(
+        "Når starter du poolish? (skriv inn klokkeslett, f.eks. 14:30)", 
+        value=datetime.now().strftime("%H:%M"),
+        key="poolish_start_time"
+    )
+    try:
+        start_time = datetime.strptime(start_time_str, "%H:%M").time()
+        today = datetime.today()
+        start_datetime = datetime.combine(today, start_time)
+
+        poolish_end = start_datetime + timedelta(hours=fermentation_hours)
+        bulk_rt_end = poolish_end + timedelta(hours=2)
+        ball_rt_end = bulk_rt_end + timedelta(hours=2)
+
+        def format_time(dt):
+            label = dt.strftime('%H:%M')
+            if dt.day != start_datetime.day:
+                label += " (neste dag!)"
+            return label
+
+        st.write(f"**Start poolish:** {format_time(start_datetime)}")
+        st.write(f"**Slutt poolish fermentering ({fermentation_hours}h):** {format_time(poolish_end)}")
+        st.write(f"**Slutt bulk RT (2h):** {format_time(bulk_rt_end)}")
+        st.write(f"**Klar til steking (etter balling og 2h RT):** {format_time(ball_rt_end)}")
+    except ValueError:
+        st.error("Skriv inn klokkeslett på formatet HH:MM, f.eks. 14:30")
