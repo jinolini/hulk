@@ -47,15 +47,15 @@ if st.button("Reset alle verdier (på hovedsiden)"):
 # --- Input section ---
 if st.session_state.recipe_mode == "standard":
     number_of_pizzas = st.slider("Antall pizzaballer", 1, 20, st.session_state.get("number_of_pizzas", 4), key="number_of_pizzas")
-    weight_per_pizza = st.slider("Vekt per pizzaball (g)", 200, 350, st.session_state.get("weight_per_pizza", 250), step=10, key="weight_per_pizza")
+    weight_per_pizza = st.slider("Vekt per pizzaball (g)", 160, 350, st.session_state.get("weight_per_pizza", 250), step=10, key="weight_per_pizza")
     hydration = st.slider("Hydrasjon (%)", 50.0, 100.0, st.session_state.get("hydration", 64.0), step=1.0, key="hydration")
     salt = standard_recipe["salt"]
     yeast = standard_recipe["yeast"]
     preset = True
 else:
     number_of_pizzas = st.slider("Antall Pizza", 1, 20, st.session_state.get("number_of_pizzas", 4), key="number_of_pizzas")
-    weight_per_pizza = st.slider("Vekt per Pizza (g)", 100, 500, st.session_state.get("weight_per_pizza", 250), step=10, key="weight_per_pizza")
-    hydration = st.slider("Hydrasjon (%)", 50.0, 80.0, st.session_state.get("hydration", 65.0), key="hydration")
+    weight_per_pizza = st.slider("Vekt per Pizza (g)", 160, 350, st.session_state.get("weight_per_pizza", 250), step=10, key="weight_per_pizza")
+    hydration = st.slider("Hydrasjon (%)", 50.0, 100.0, st.session_state.get("hydration", 65.0), key="hydration", step=1.0)
     salt = st.slider("Salt (%)", 1.0, 3.0, st.session_state.get("salt", 2.0), step=0.1, key="salt")
     yeast = st.slider("Gjær (%)", 0.1, 2.0, st.session_state.get("yeast", 0.3), step=0.01, key="yeast")
     preset = False
