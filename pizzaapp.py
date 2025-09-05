@@ -32,22 +32,34 @@ if use_standard:
 if use_custom:
     st.session_state.recipe_mode = "custom"
 
+# --- Main page reset button ---
+if "reset_main" not in st.session_state:
+    st.session_state.reset_main = False
+
+if st.button("Reset alle verdier (på hovedsiden)"):
+    st.session_state.number_of_pizzas = 4
+    st.session_state.weight_per_pizza = 250
+    st.session_state.hydration = 65.0
+    st.session_state.salt = 2.0
+    st.session_state.yeast = 0.3
+    st.session_state.reset_main = True
+    st.experimental_rerun()
+
 # --- Input section ---
 if st.session_state.recipe_mode == "standard":
-    # Add sliders for number of balls and ball size
-    number_of_pizzas = st.slider("Antall pizzaballer", 1, 20, 4)
-    weight_per_pizza = st.slider("Vekt per pizzaball (g)", 160, 350, 250, step=10)
-    hydration = st.slider("Hydrasjon (%)", 50.0, 100.0, standard_recipe["hydration"], step=1.0)
+    number_of_pizzas = st.slider("Antall pizzaballer", 1, 20, st.session_state.get("number_of_pizzas", 4), key="number_of_pizzas")
+    weight_per_pizza = st.slider("Vekt per pizzaball (g)", 200, 350, st.session_state.get("weight_per_pizza", 250), step=10, key="weight_per_pizza")
+    hydration = st.slider("Hydrasjon (%)", 50.0, 100.0, st.session_state.get("hydration", 64.0), step=1.0, key="hydration")
     salt = standard_recipe["salt"]
     yeast = standard_recipe["yeast"]
     preset = True
 else:
+    number_of_pizzas = st.slider("Antall Pizza", 1, 20, st.session_state.get("number_of_pizzas", 4), key="number_of_pizzas")
+    weight_per_pizza = st.slider("Vekt per Pizza (g)", 100, 500, st.session_state.get("weight_per_pizza", 250), step=10, key="weight_per_pizza")
+    hydration = st.slider("Hydrasjon (%)", 50.0, 80.0, st.session_state.get("hydration", 65.0), key="hydration")
+    salt = st.slider("Salt (%)", 1.0, 3.0, st.session_state.get("salt", 2.0), step=0.1, key="salt")
+    yeast = st.slider("Gjær (%)", 0.1, 2.0, st.session_state.get("yeast", 0.3), step=0.01, key="yeast")
     preset = False
-    number_of_pizzas = st.slider("Antall Pizza", 1, 20, 4)
-    weight_per_pizza = st.slider("Vekt per Pizza (g)", 160, 350, 250, step=10)
-    hydration = st.slider("Hydrasjon (%)", 50.0, 100.0, 65.0, step=1.0)
-    salt = st.slider("Salt (%)", 1.0, 3.0, 2.0, step=0.1)
-    yeast = st.slider("Gjær (%)", 0.1, 2.0, 0.3, step=0.01)
 
 # --- Calculations ---
 if preset:
@@ -110,7 +122,4 @@ if st.session_state.recipe_mode == "standard":
         st.error("Skriv inn klokkeslett på formatet HH:MM, f.eks. 14:30")
 
 # --- Hide chart and table ---
-
 # (Chart and table code is commented out)
-
-
